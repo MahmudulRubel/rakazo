@@ -5,6 +5,11 @@ PORT="${PORT:-10000}"
 export API_PORT=3100
 export API_HOST="127.0.0.1"
 
+if [ -n "${DATABASE_URL:-}" ]; then
+  # Strip -pooler from Neon connection string for direct migration & realtime compatibility
+  export DATABASE_URL="$(node -e 'console.log((process.env.DATABASE_URL || "").replace(/-pooler\./g, "."))')"
+fi
+
 if [ -n "${RENDER_EXTERNAL_URL:-}" ]; then
   export WEB_ORIGIN="${WEB_ORIGIN:-$RENDER_EXTERNAL_URL}"
   export BETTER_AUTH_URL="${BETTER_AUTH_URL:-$RENDER_EXTERNAL_URL}"
