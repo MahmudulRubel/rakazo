@@ -184,9 +184,11 @@ export async function deployMigrations(input: {
       : withLockTimeout(input.migrationUrl, input.lockTimeoutMs ?? LOCK_TIMEOUT_MS);
     for (let attempt = 0; ; attempt++) {
       try {
-        execFileSync("pnpm", ["exec", "prisma", "migrate", "deploy"], {
+        const pnpmCmd = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+        execFileSync(pnpmCmd, ["exec", "prisma", "migrate", "deploy"], {
           cwd: input.dbPackageDir,
           stdio: "inherit",
+          shell: process.platform === "win32",
           env: {
             ...process.env,
             DATABASE_MIGRATION_URL: deployUrl,

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: rakazo
+    runtime: docker
+    dockerfilePath: ./infra/render/Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: BETTER_AUTH_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: SCREEN_PROXY_SECRET
+        generateValue: true
+      - key: SANDBOX_SUPERVISOR_TOKEN
+        generateValue: true
+      - key: SANDBOX_PROVIDER
+        value: e2b
+      - key: E2B_API_KEY
+        sync: false
