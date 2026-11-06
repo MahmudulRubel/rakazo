@@ -2,6 +2,8 @@
 set -euo pipefail
 
 PORT="${PORT:-10000}"
+export PORT
+export WEB_PORT="$PORT"
 export API_PORT=3100
 export API_HOST="127.0.0.1"
 
@@ -44,4 +46,4 @@ echo "Starting Worker in background..."
 pnpm --filter @rakazo/worker start &
 
 echo "Starting Web UI on port $PORT..."
-exec pnpm --filter @rakazo/web preview --host 0.0.0.0 --port "$PORT"
+cd apps/web && exec pnpm exec vite preview --host 0.0.0.0 --port "$PORT"
