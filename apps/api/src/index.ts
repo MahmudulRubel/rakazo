@@ -16,8 +16,10 @@ const logger = createRootLogger(SERVICE_NAMES.api);
 
 try {
   const env = loadEnv();
+  console.log(`[api] Initializing API on ${env.apiHost}:${env.port}...`);
   const { app, stop, handleUpgrade } = await createApp({ ...env, logger });
   const server = serve({ fetch: app.fetch, port: env.port, hostname: env.apiHost }, () => {
+    console.log(`[api] API listening on http://${env.apiHost}:${env.port}`);
     logger.info("api listening", { "http.host": env.apiHost, "http.port": env.port });
   });
   // Desktop apps hold an outbound socket so bots can reach the user's own computer.
@@ -46,6 +48,7 @@ try {
   };
   stopOnShutdownSignals(shutdown);
 } catch (error) {
+  console.error("[api] CRITICAL API STARTUP FAILED:", error);
   logger.error("api startup failed", error);
   await logger.flush({ timeoutMs: 2_000 });
   process.exit(1);

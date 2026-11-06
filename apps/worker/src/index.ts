@@ -471,12 +471,14 @@ async function main() {
   stopHealth = startWorkerHealth(reconciler.lastCompletedAt);
 
   logger.info("worker ready", { degraded: secrets.describe().capabilities.degraded ?? false });
+  console.log("[worker] Worker background service ready.");
 }
 
 // The worker only does cross-tenant work: job dispatch, reconcilers, leadership and
 // realtime, all keyed by ids rather than a signed-in user. This is its one
 // row-level security bypass; jobs re-enter it explicitly (see wakeup.ts).
 runAsSystem("worker process", main).catch(async (error) => {
+  console.error("[worker] CRITICAL WORKER STARTUP FAILED:", error);
   logger.error("worker startup failed", error);
   await logger.flush({ timeoutMs: 2_000 });
   // jobHost.start retries 53300 without bound above, so a saturated Postgres at
