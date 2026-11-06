@@ -58,7 +58,7 @@ import {
   watchScreenAuthorization,
 } from "./src/screen-proxy.js";
 
-const webPort = Number(process.env.WEB_PORT ?? 5173);
+const webPort = Number(process.env.PORT ?? process.env.WEB_PORT ?? 5173);
 const DESKTOP_STACK_PROBE_PATH = "/.well-known/rakazo-desktop-stack";
 const DESKTOP_STACK_TOKEN_HEADER = "x-rakazo-desktop-stack-token";
 const SCREEN_UPSTREAM_TIMEOUT_MS = 20_000;
@@ -656,7 +656,7 @@ export default defineConfig(({ command, mode }) => {
     },
     preview: {
       host: "0.0.0.0",
-      port: Number(process.env.WEB_PORT ?? 5173),
+      port: Number(process.env.PORT ?? process.env.WEB_PORT ?? 5173),
       allowedHosts,
       proxy,
     },

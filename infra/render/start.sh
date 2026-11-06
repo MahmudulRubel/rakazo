@@ -45,4 +45,4 @@ throw new Error("API did not become ready after 120 seconds");
 '
 
 echo "Starting Web UI on port $PORT..."
-cd apps/web && exec pnpm exec vite preview --host 0.0.0.0 --port "$PORT"
+exec pnpm --filter @rakazo/web run preview -- --host 0.0.0.0 --port "$PORT"
