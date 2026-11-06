@@ -215,6 +215,7 @@ export const MOBILE_AUTH_ORIGINS = [
   "http://127.0.0.1:8081",
   "http://localhost:19006",
   "http://127.0.0.1:19006",
+  "https://*.trycloudflare.com",
 ];
 
 // Deploys give the old API 30 seconds to stop before killing it.
@@ -1542,6 +1543,10 @@ export function isTrustedOrigin(
 ) {
   if (!origin) return true;
   if (origin.startsWith("rakazo://")) return true;
+  try {
+    const url = new URL(origin);
+    if (url.hostname.endsWith(".trycloudflare.com")) return true;
+  } catch {}
   const allowed = new Set(
     [env.webOrigin, env.apiUrl, env.authUrl, ...MOBILE_AUTH_ORIGINS].flatMap(originVariants),
   );
