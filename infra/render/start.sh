@@ -6,6 +6,8 @@ export PORT
 export WEB_PORT="$PORT"
 export API_PORT=3100
 export API_HOST="127.0.0.1"
+export WAKEUP_DRIVER="memory"
+export NODE_OPTIONS="--max-old-space-size=192"
 
 if [ -n "${DATABASE_URL:-}" ]; then
   # Strip -pooler from Neon connection string for direct migration & realtime compatibility
@@ -20,7 +22,7 @@ fi
 echo "Starting database migrations..."
 pnpm --filter @rakazo/api db:deploy
 
-echo "Starting API..."
+echo "Starting API with in-memory worker..."
 pnpm --filter @rakazo/api start &
 
 echo "Waiting for API to become ready on http://127.0.0.1:3100..."
@@ -41,9 +43,6 @@ for (let attempt = 1; attempt <= 120; attempt++) {
 }
 throw new Error("API did not become ready after 120 seconds");
 '
-
-echo "Starting Worker in background..."
-pnpm --filter @rakazo/worker start &
 
 echo "Starting Web UI on port $PORT..."
 cd apps/web && exec pnpm exec vite preview --host 0.0.0.0 --port "$PORT"
