@@ -20,7 +20,7 @@ if [ -n "${RENDER_EXTERNAL_URL:-}" ]; then
 fi
 
 echo "Starting database migrations..."
-pnpm --filter @rakazo/api db:deploy
+pnpm --filter @rakazo/api db:deploy || true
 
 echo "Starting API with in-memory worker..."
 pnpm --filter @rakazo/api start &
@@ -45,4 +45,4 @@ throw new Error("API did not become ready after 120 seconds");
 '
 
 echo "Starting Web UI on port $PORT..."
-exec pnpm --filter @rakazo/web run preview -- --host 0.0.0.0 --port "$PORT"
+exec pnpm --filter @rakazo/web run preview
